@@ -1,0 +1,4 @@
+1. In Stream , the order is undefined. ; Iterable.forEach is always executed in the iteration order of the Iterable, if one is specified.
+
+2. Stream is non interfering with its source. Iterable.forEach(-failfast)throws concurrent modification exception if the source is structurally modified, (setting value of an element in a list is 
+not structural modification,,,,)

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fragment xmlns="http://www.worksap.com/xmlns/forneus" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:c="http://www.worksap.com/xmlns/forneus/condition" xmlns:l="http://www.worksap.com/xmlns/forneus/layout" id="goods-movement-schedule-fragment">
+	<l:row>
+		<wap-header-label id="basic-header-label" label="Goods Movement Schedule" header-type="side"/>
+	</l:row>
+	<l:row>
+		<wap-master-input id="movement-schedule-source-master-input" name="goodsMovementScheduleContents.warehouseSourceName" init-show-text-key="goodsMovementScheduleContents.warehouseSourceName" width-size="l" master-search-id="goodsMovementListValuesBean.sourceWarehouseName" use-history="false" show-code="false" label="Moving Source" required="true" example="e.g.) Gunma Factory Warehouse">
+			<wap-master-input-subitem id="source-warehouse-master-input-subitem" name="goodsMovementScheduleContents.warehouseSourceId" ac-field="warehouse_id"/>
+		</wap-master-input>
+	</l:row>
+	<l:row margin-top-unit="size-base-half" margin-bottom-unit="size-base-half">
+		<l:col md="fixed" width-unit="size-base-27" align-children="right-to-left-on-top">
+			<wap-text-label id="swap-button-text-label" name="swapButtonTextLabel" message-type="subtext" display="none"/>
+		</l:col>
+		<l:col md="fixed" width-unit="size-base-1" remove-if-empty="false" auto-padding="false"/>
+		<l:col align-children="left-to-right-on-center" auto-padding="false">
+			<wap-button id="swap-schedule-button" label="Switch the Movement Source and Go To" icon="shift"/>
+		</l:col>
+	</l:row>
+	<l:row>
+		<wap-master-input id="movement-schedule-destination-master-input" name="goodsMovementScheduleContents.warehouseDestinationName" width-size="l" show-value-at-text="false" show-code="false" master-search-id="goodsMovementListValuesBean.destinationWarehouseName" use-history="false" init-show-text-key="goodsMovementScheduleContents.warehouseDestinationName" label="Go To" required="true" example="e.g.) Metropolitan Distribution Center">
+			<wap-master-input-subitem id="destination-warehouse-master-input-subitem" name="goodsMovementScheduleContents.warehouseDestinationId" ac-field="warehouse_id"/>
+		</wap-master-input>
+	</l:row>
+	<l:row>
+		<l:col md="fixed" width-unit="size-base-55" align-children="left-to-right">
+			<c:if condition="${!cancelmode}">
+				<wap-date-input id="goods-receipt-date-input" name="goodsMovementScheduleContents.goodsReceiptScheduledDate" use-history="off" format-style="long-with-day" auto-learning="false" required="true" label="Goods Receipt Date" mindate="1900/01/01" maxdate="2101/01/01"/>
+			</c:if>
+			<c:if condition="${cancelmode}">
+				<wap-date-input id="goods-receipt-date-input" name="goodsMovementScheduleContents.goodsReceiptScheduledDate" use-history="off" format-style="long-with-day" auto-learning="false" readonly="true" required="true" label="Goods Receipt Date" mindate="1900/01/01" maxdate="2101/01/01"/>
+			</c:if>
+		</l:col>
+		<l:col md="fixed" align-children="left-to-right" width-unit="size-base-5">
+			<wap-anchor-label id="receipt-date-info-anchor-label" color-type="light-gray" icon="info" display="none"/>
+			<wap-popover id="receipt-date-back-popover" target-id="receipt-date-info-anchor-label" trigger="hover" animation="true" width-size="m" title-label="Change copy source information">
+				<wap-message-panel id="input-date-message-panel">
+					<wap-text-label id="copy-date-header-label" label="Change Copy Source Information" font-size="sub-caption" side-padding="false"/>
+				</wap-message-panel>
+				<l:row align-children="top-to-bottom">
+					<wap-text-label id="receipt-cleared-text-label" label="Goods receipt date cleared"/>
+					<wap-anchor-label id="receipt-take-back-anchor-label" label="To take over as it is "/>
+				</l:row>
+			</wap-popover>
+		</l:col>
+	</l:row>
+	
+	<l:row>
+	
+	<sima-grid id="untarget-account-sima-grid"
+				name="orderFundDisposeApplicationContents.fundDisposeUnTargetEntityList"
+				row-header-column-id="row-number-sima-grid-column" height="auto" canvas-height="56"
+				plugin-set="default" key-field="itemDetail">
+				<sima-grid-column id="row-number-sima-grid-column"
+					editable="false" width="40" field="rowNumber" label="text.TRES.FUDI.no"
+					readonly="true" header-align="center"></sima-grid-column>
+				<sima-grid-column id="check-box-sima-grid-column"
+					header-type="boolean" header-editable="true" field="checkTarget"
+					resizable="true" type="boolean" left-border="1px groove #ccc"
+					header-left-border="1px groove #ccc" width="40" focusable="false" />
+				<sima-grid-column left-border="1px groove #ccc"
+					header-left-border="1px groove #ccc" id="account-name-sima-grid-column"
+					field="accountName" resizable="false" type="string" width="flex:15"
+					readonly="false" editor="wap.core.ui.sima.editor.SimaGridAutoCompleteEditor"
+					align="left" header-align="left" editable="false"
+					item-id="targetAccountInfo.accountNameMLString">
+				</sima-grid-column>
+				<sima-grid-column id="target-sima-grid-column"
+					field="targetBalance" resizable="false" width="flex:15" readonly="false"
+					align="right" header-align="right" editable="false" type="currency"
+					formatter="Currency" item-id="targetAccountInfo.targetBalance" />
+				<sima-grid-column id="balance-before-sima-grid-column"
+					field="balanceBeforeTransfer" resizable="false" width="flex:17"
+					readonly="false" align="right" header-align="right" editable="false"
+					type="currency" formatter="Currency" item-id="targetAccountInfo.balanceBeforeMovement" />
+				<sima-grid-column id="move-amount-sima-grid-column"
+					field="amount" resizable="false" width="flex:15" readonly="true"
+					align="right" header-align="right" type="currency" formatter="Currency"
+					editable="false" item-id="targetAccountInfo.moveAmount" />
+				<sima-grid-column id="balance-after-sima-grid-column"
+					field="balanceAfterTransfer" resizable="false" width="flex:15"
+					readonly="false" align="right" header-align="right" editable="false"
+					type="currency" formatter="Currency" item-id="targetAccountInfo.balanceAfterMovement" />
+				<sima-grid-column editable="true"
+					id="exchange-rate-sima-grid-column" field="exchangeRateSimaGridColumn"
+					editor-options="{&quot;caption&quot;:&quot;text.TRES.FUDI.exchangeRate&quot;,&quot;width&quot;:&quot;0.9&quot;,&quot;backgroundColor&quot;:&quot;#4285F4&quot;,&quot;backgroundColor:hover&quot;:&quot;#4285F4&quot;,&quot;fontColor&quot;:&quot;#FFFFFF&quot;,&quot;borderColor&quot;:&quot;#4285F4&quot;}"
+					width="flex:15" type="button" item-id="exchangeRate" />
+				<sima-grid-column id="exchange-rate-one-sima-grid-column"
+					field="exchangeRateOneSimaGridColumn"
+					editor-options="{&quot;caption&quot;:&quot;text.TRES.FUDI.exchangeRate&quot;,&quot;width&quot;:&quot;0.9&quot;,&quot;backgroundColor&quot;:&quot;#4285F4&quot;,&quot;backgroundColor:hover&quot;:&quot;#4285F4&quot;,&quot;fontColor&quot;:&quot;#FFFFFF&quot;,&quot;borderColor&quot;:&quot;#4285F4&quot;}"
+					width="flex:15" type="button" editable="true" item-id="exchangeRateButton" />
+				<sima-grid-column id="foreign-items-sima-grid-column"
+					field="foreignItemsSimaGridColumn"
+					editor-options="{&quot;caption&quot;:&quot;text.TRES.FUDI.foreignRemittanceItem&quot;,&quot;width&quot;:&quot;0.9&quot;,&quot;backgroundColor&quot;:&quot;#F4B142&quot;,&quot;backgroundColor:hover&quot;:&quot;#F4B142&quot;,&quot;fontColor&quot;:&quot;#FFFFFF&quot;,&quot;borderColor&quot;:&quot;#F4B142&quot;}"
+					width="flex:15" type="button" item-id="foreignItems" editable="true" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="basis-balance-sima-grid-column"
+					field="basisTargetBalance" width="flex:10" type="currency" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc"
+					id="estimated-amount-sima-grid-column" field="depositTargetTotalAmount"
+					width="flex:10" type="currency" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc"
+					id="withdrawal-amount-sima-grid-column" field="withdrawalTargetTotalAmount"
+					width="flex:10" type="currency" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="rece-name-sima-grid-column"
+					field="foreignTransferItemReceName" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="rece-address-sima-grid-column"
+					field="foreignTransferItemReceAddress" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="bank-name-sima-grid-column"
+					field="foreignTransferItemToBankName" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="swift-code-sima-grid-column"
+					field="foreignTransferItemSwiftCode" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="branch-name-sima-grid-column"
+					field="foreignTransferItemToBranchName" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="bank-address-sima-grid-column"
+					field="foreignTransferItemToBankAdress" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="purpose-text-sima-grid-column"
+					field="foreignTransferItemPurposeText" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc"
+					id="rate-application-date-sima-grid-column" field="rateBaseDate"
+					width="flex:10" type="date" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="rate-type-sima-grid-column"
+					field="rateTypeCode" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="issue-date-info-anchor-label"
+					field="rateValue" width="flex:10" type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc"
+					id="converted-amount-sima-grid-column" field="exchangeAmount"
+					width="flex:10" type="currency" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc"
+					id="bank-account-id-sima-grid-column" field="bankAccountId" width="flex:10"
+					type="string" />
+				<sima-grid-column left-border="1px groove #ccc"
+					visible="false" header-left-border="1px groove #ccc" id="image-source-sima-grid-column"
+					field="imageSource" width="flex:10" type="string" />
+				<sima-grid-hover-button>
+					<sima-grid-hover-button-item column-id="balance-before-sima-grid-column"
+						icon="info" align="left" />
+				</sima-grid-hover-button>
+				<sima-grid-popover />
+				<sima-grid-metadata-provider row-number="rowNumber" />
+				<sima-grid-blank-row-keeper blank-rows="0"
+					min-total-rows="0" />
+				<sima-grid-column-resizer />
+				<sima-grid-metadata-provider row-number="row-number-sima-grid-column" />
+				<sima-grid-scrollbar />
+				<sima-grid-contextmenu show-default-menu="false" />
+				<sima-grid-key-operation enter-to-next-cell="true" />
+				<plugin-sima-grid-auto-complete-manager />
+			</sima-grid>
+	</l:row>
+	
+	<l:row>
+		<l:col md="fixed" width-unit="size-base-55" align-children="left-to-right">
+			<c:if condition="${!cancelmode}">
+				<wap-date-input id="goods-issue-date-input" name="goodsMovementScheduleContents.goodsIssueScheduledDate" use-history="off" format-style="long-with-day" auto-learning="false" required="true" label="Goods Issue Date" mindate="1900/01/01" maxdate="2101/01/01"/>
+			</c:if>
+			<c:if condition="${cancelmode}">
+				<wap-date-input id="goods-issue-date-input" name="goodsMovementScheduleContents.goodsIssueScheduledDate" use-history="off" format-style="long-with-day" auto-learning="false" readonly="true" required="true" label="Goods Issue Date" mindate="1900/01/01" maxdate="2101/01/01"/>
+			</c:if>
+		</l:col>
+		<l:col md="fixed" align-children="left-to-right" width-unit="size-base-5">
+			<wap-anchor-label id="issue-date-info-anchor-label" color-type="light-gray" icon="info" display="none"/>
+			<wap-popover id="issue-date-back-popover" target-id="issue-date-info-anchor-label" trigger="hover" animation="true" width-size="m" title-label="Change copy source information">
+				<wap-message-panel id="input-date-message-panel">
+					<wap-text-label id="copy-date-header-label" label="Change Copy Source Information" font-size="sub-caption" side-padding="false"/>
+				</wap-message-panel>
+				<l:row align-children="top-to-bottom">
+					<wap-text-label id="receipt-cleared-text-label" label="Goods issue date clear"/>
+					<wap-anchor-label id="issue-take-back-anchor-label" label="To take over as it is "/>
+				</l:row>
+			</wap-popover>
+		</l:col>
+	</l:row>
+	<l:row>
+		<l:col md="fixed" width-unit="size-base-27" align-children="right-to-left-on-top">
+			<wap-text-label id="attachment-text-label" name="attachmentTextLabel" message-type="subtext" label="Attachment"/>
+		</l:col>
+		<l:col md="fixed" width-unit="size-base-1" remove-if-empty="false" auto-padding="false"/>
+		<l:col align-children="left-to-right-on-center" auto-padding="false">
+			<hue-drive-file-upload id="internal-documents-hue-drive-file-upload" business-category="REPORT" label="Attach a File" button-icon="download"/>
+		</l:col>
+	</l:row>
+	<l:row>
+		<l:col md="fixed" width-unit="size-base-27" align-children="right-to-left-on-top">
+			<wap-text-label id="ivtl-attachment-text-label" name="ivtlAttachmentTextLabel" message-type="subtext" display="none"/>
+		</l:col>
+		<l:col md="fixed" width-unit="size-base-1" remove-if-empty="false" auto-padding="false"/>
+		<l:col align-children="left-to-right-on-center" auto-padding="false">
+			<ivtl-file-attachment-list id="item-ivtl-file-attachment-list" width="500" height="200"></ivtl-file-attachment-list>
+		</l:col>
+	</l:row>
+	<l:row>
+		<wap-textarea id="remarks-textarea" name="goodsMovementScheduleContents.goodsMovementListValuesBean.comments" width-size="l" rows="3" label="Remarks" maxlength="250" required="false"/>
+	</l:row>
+	<l:row id="grid-tool-row" auto-padding="false">
+		<l:col md="6" align-children="left-to-right">
+			<wap-header-label id="detail-header-label" label="Item Detail" auto-padding="false" font-size="title"/>
+		</l:col>
+		<l:col align-children="right-to-left" padding-horizontal-unit="size-base-2">
+			<wap-button id="line-add-button" icon="add" hint="Add"/>
+			<wap-button id="line-clear-button" icon="eraser" hint="Clear"/>
+			<wap-button id="contract-button" icon="contract" display="none" hint="Contract"/>
+			<wap-button id="expand-button" icon="expand" hint="Expand"/>
+		</l:col>
+	</l:row>
+	<wap-toastr id="detail-toastr"/>
+	<wap-text-input id="status-text-input" name="goodsMovementScheduleContents.status" readonly="true" display="none"/>
+	<wap-text-input id="source-name-text-input" name="goodsMovementScheduleContents.sourceName" display="none"/>
+	<wap-text-input id="destination-name-text-input" name="goodsMovementScheduleContents.destinationName" display="none"/>
+</fragment>

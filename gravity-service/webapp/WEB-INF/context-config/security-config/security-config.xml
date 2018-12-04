@@ -1,0 +1,24 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:beans="http://www.springframework.org/schema/beans"
+xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd"
+>
+
+<http auto-config="true">
+<intercept-url pattern="/*" access="isAnonymous()"/>
+    <form-login login-page = "/login" default-target-url="/login"
+    authentication-failure-url="/login" />
+    <logout logout-success-url="/logout"/>
+	<custom-filter after="SWITCH_USER_FILTER" ref="webServiceAccessFilter"/>
+	<csrf disabled="true"/>
+	</http>
+ 	
+	<authentication-manager>
+	<authentication-provider>
+	<user-service>
+	<user name="ivroot" authorities="IS_AUTHENTICATED_ANOYMOUSLY"/></user-service></authentication-provider></authentication-manager>
+	<beans:bean id="webServiceAccessFilter"
+		class="com.iv.cortex.filter.WebServiceAccessFilter">
+	</beans:bean>
+</beans:beans>
